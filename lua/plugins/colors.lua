@@ -5,7 +5,7 @@ return {
         priority = 1000, -- Load this before everything else
         config = function()
             require("tokyonight").setup({
-                style = "storm",     -- Or "night", "moon", "day"
+                style = "night",     -- Or "night", "moon", "day"
                 transparent = true,  -- This is the magic line
                 styles = {
                     sidebars = "transparent", -- Makes nvim-tree transparent

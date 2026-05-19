@@ -6,6 +6,8 @@ return {
         'folke/neodev.nvim',
         'hrsh7th/nvim-cmp',
         'hrsh7th/cmp-nvim-lsp',
+        'saadparwaiz1/cmp_luasnip',
+        { 'L3MON4D3/LuaSnip', version = "v2.*" },
     },
     config = function()
         -- 1. Setup Neodev for the 'vim' global
@@ -14,8 +16,7 @@ return {
         -- 2. Setup Mason
         require('mason').setup({})
         require('mason-lspconfig').setup({
-            -- ADDED "pyright" HERE
-            ensure_installed = { "lua_ls", "pyright" }, 
+            ensure_installed = { "lua_ls", "pyright", "clangd", "bashls" }, 
         })
 
         -- 3. THE NEW 0.11+ WAY
@@ -38,7 +39,7 @@ return {
             },
         })
 
-        -- --- PYTHON CONFIG (ADDED THIS) ---
+        -- --- PYTHON CONFIG ---
         vim.lsp.config('pyright', {
             cmd = { 'pyright-langserver', '--stdio' },
             filetypes = { 'python' },
@@ -54,9 +55,25 @@ return {
             },
         })
 
+        -- --- C / C++ CONFIG ---
+        vim.lsp.config('clangd', {
+            cmd = { 'clangd' },
+            filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+            capabilities = capabilities,
+        })
+
+        -- --- BASH CONFIG ---
+        vim.lsp.config('bashls', {
+            cmd = { 'bash-language-server', 'start' },
+            filetypes = { 'sh' },
+            capabilities = capabilities,
+        })
+
         -- Automatically start configured servers
         vim.lsp.enable('lua_ls')
-        vim.lsp.enable('pyright') -- ENABLE PYTHON HERE
+        vim.lsp.enable('pyright')
+        vim.lsp.enable('clangd')
+        vim.lsp.enable('bashls')
 
         -- 4. Simple Keybindings
         vim.api.nvim_create_autocmd('LspAttach', {
@@ -64,17 +81,46 @@ return {
                 local opts = { buffer = args.buf }
                 vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
                 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-                -- Added Rename (super useful for Python)
                 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+                vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
             end,
         })
 
-        -- 5. Minimal CMP Setup
+        -- 5. Updated CMP Setup with j/k navigation
         local cmp = require('cmp')
+        local luasnip = require('luasnip')
+
         cmp.setup({
-            sources = { { name = 'nvim_lsp' } },
+            snippet = {
+                expand = function(args)
+                    luasnip.lsp_expand(args.body)
+                end,
+            },
+            sources = { 
+                { name = 'nvim_lsp' },
+                { name = 'luasnip' },
+            },
             mapping = cmp.mapping.preset.insert({
+                -- Accept completion item
                 ['<CR>'] = cmp.mapping.confirm({ select = true }),
+
+                -- Navigate down the menu with Ctrl+j
+                ['<C-j>'] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        cmp.select_next_item()
+                    else
+                        fallback()
+                    end
+                end, { 'i', 's' }),
+
+                -- Navigate up the menu with Ctrl+k
+                ['<C-k>'] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        cmp.select_prev_item()
+                    else
+                        fallback()
+                    end
+                end, { 'i', 's' }),
             }),
         })
     end
