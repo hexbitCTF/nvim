@@ -1,0 +1,7 @@
+{
+    "diagnostics.globals": [
+        "vim",
+        "neovim",
+        "local"
+    ]
+}
