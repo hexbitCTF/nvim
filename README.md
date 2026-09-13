@@ -25,12 +25,12 @@ My Neovim configuration managed with [lazy.nvim](https://github.com/folke/lazy.n
 
 ## Features
 
-- **Theme:** Tokyonight (night style, transparent backgrounds)
+- **Theme:** Follows the Hexarchy system theme via aether.nvim
 - **LSP:** Lua, Python, C/C++, Bash, HTML, CSS via Mason
 - **Completion:** nvim-cmp with luasnip + friendly-snippets
 - **Navigation:** Telescope (files, grep, undo history), Harpoon
 - **Tree-sitter:** Syntax highlighting + auto-indent for Lua, C, TSX, CSS, TS, Python, PHP
-- **Status line:** lualine with tokyonight theme
+- **Status line:** lualine with auto theme
 - **Dashboard:** Snacks.nvim startup screen with action shortcuts
 - **Git:** vim-fugitive
 - **File explorer:** nvim-tree (transparent, left sidebar)

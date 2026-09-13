@@ -15,7 +15,7 @@ vim.api.nvim_create_user_command('W', function()
 	end
 
 	-- Choose your privilege escalation utility ('doas' or 'sudo')
-	local elevator = "doas" 
+	local elevator = "sudo" 
 
 	-- Construct the command to write the buffer via tee
 	local cmd = string.format("w !%s tee %% > /dev/null", elevator)

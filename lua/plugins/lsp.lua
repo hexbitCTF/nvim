@@ -182,31 +182,4 @@ return {
             })
         end
     },
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,    
-        priority = 1000, 
-        config = function()
-            require("tokyonight").setup({
-                style = "night",     
-                transparent = true,  
-                styles = {
-                    sidebars = "transparent", 
-                    floats = "transparent",   
-                },
-            })
-            vim.cmd.colorscheme "tokyonight"
-        end
-    },
-    {
-        "nvim-lualine/lualine.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        opts = {
-            options = {
-                theme = 'tokyonight',
-                section_separators = '',
-                component_separators = '',
-            }
-        }
     }
-}
