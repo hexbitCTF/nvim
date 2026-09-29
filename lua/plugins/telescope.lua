@@ -53,22 +53,9 @@ return {
 
         require("telescope").load_extension("undo")
 
-        local transparent = {
-            "TelescopePromptNormal",
-            "TelescopePromptBorder",
-            "TelescopeResultsNormal",
-            "TelescopeResultsBorder",
-            "TelescopePreviewNormal",
-            "TelescopePreviewBorder",
-            "TelescopeSelection",
-            "TelescopeSelectionCaret",
-            "TelescopeMultiSelection",
-            "TelescopePreviewLine",
-            "TelescopePreviewMatch",
-        }
-        for _, group in ipairs(transparent) do
-            vim.api.nvim_set_hl(0, group, { bg = "none" })
-        end
+        -- Highlight transparency for the Telescope groups is defined once in
+        -- plugins/theme.lua, which re-applies it on every FileType change so it
+        -- survives Telescope setting its own highlights when a picker opens.
 
         -- Map keybindings directly
         vim.keymap.set('n', '<leader>ff', function()

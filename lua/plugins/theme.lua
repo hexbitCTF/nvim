@@ -90,12 +90,21 @@ local transparent_groups = {
 	"TelescopeResultsBorder",
 	"TelescopePreviewNormal",
 	"TelescopePreviewBorder",
+	-- Telescope declares the four border groups as default links:
+	-- TelescopePromptBorder -> TelescopeBorder -> TelescopeNormal, and the
+	-- same for results/preview. Setting bg on the leaves is not enough, because
+	-- the background is inherited from the link targets, so those two have to be
+	-- transparent as well or the border picks the theme background back up.
+	"TelescopeBorder",
+	"TelescopeNormal",
 	"TelescopeSelection",
 	"TelescopeSelectionCaret",
 	"TelescopeMultiSelection",
 	"TelescopePreviewLine",
 	"TelescopePreviewMatch",
 }
+
+local transparent_group = vim.api.nvim_create_augroup("AetherTransparency", { clear = true })
 
 local function make_transparent()
 	for _, group in ipairs(transparent_groups) do
@@ -104,6 +113,14 @@ local function make_transparent()
 			vim.api.nvim_set_hl(0, group, { bg = "none" })
 		end
 	end
+end
+
+-- Telescope sets its own highlights every time a picker opens, which undoes
+-- anything applied at startup or on ColorScheme. Re-apply after each picker
+-- buffer is created; vim.schedule defers past the point where Telescope has
+-- finished writing its highlights, so ours win.
+local function schedule_transparent()
+	vim.schedule(make_transparent)
 end
 
 local function watch()
@@ -128,7 +145,13 @@ return {
 			watch()
 		end
 		vim.api.nvim_create_autocmd("ColorScheme", {
+			group = transparent_group,
 			callback = make_transparent,
+		})
+		vim.api.nvim_create_autocmd("FileType", {
+			group = transparent_group,
+			pattern = { "TelescopePrompt", "TelescopeResults", "TelescopePreview" },
+			callback = schedule_transparent,
 		})
 		make_transparent()
 	end,
