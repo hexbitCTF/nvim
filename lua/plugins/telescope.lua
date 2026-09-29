@@ -53,6 +53,23 @@ return {
 
         require("telescope").load_extension("undo")
 
+        local transparent = {
+            "TelescopePromptNormal",
+            "TelescopePromptBorder",
+            "TelescopeResultsNormal",
+            "TelescopeResultsBorder",
+            "TelescopePreviewNormal",
+            "TelescopePreviewBorder",
+            "TelescopeSelection",
+            "TelescopeSelectionCaret",
+            "TelescopeMultiSelection",
+            "TelescopePreviewLine",
+            "TelescopePreviewMatch",
+        }
+        for _, group in ipairs(transparent) do
+            vim.api.nvim_set_hl(0, group, { bg = "none" })
+        end
+
         -- Map keybindings directly
         vim.keymap.set('n', '<leader>ff', function()
             builtin.find_files({ hidden = true, no_ignore = false })

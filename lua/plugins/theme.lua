@@ -84,6 +84,17 @@ local transparent_groups = {
 	"FoldColumn",
 	"MsgArea",
 	"WinSeparator",
+	"TelescopePromptNormal",
+	"TelescopePromptBorder",
+	"TelescopeResultsNormal",
+	"TelescopeResultsBorder",
+	"TelescopePreviewNormal",
+	"TelescopePreviewBorder",
+	"TelescopeSelection",
+	"TelescopeSelectionCaret",
+	"TelescopeMultiSelection",
+	"TelescopePreviewLine",
+	"TelescopePreviewMatch",
 }
 
 local function make_transparent()
